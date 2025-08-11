@@ -78,6 +78,37 @@ app.post('/api/wx/chat', async (req, res) => {
   }
 });
 
+app.post('/api/wxo/chat', async (req, res) => {
+  try {
+    const { input } = req.body || {};
+    const apiKey = process.env.WXO_API_KEY;
+    const instanceUrl = process.env.WXO_INSTANCE_URL;
+    const agentId = process.env.WXO_AGENT_ID;
+    if (!apiKey || !instanceUrl || !agentId) {
+      return res.status(400).json({ error: 'Missing WXO_* env vars' });
+    }
+    const token = await getIamToken(apiKey);
+    const url = `${instanceUrl}/v1/orchestrate/${agentId}/chat/completions`;
+    const body = {
+      messages: input ? [{ role: 'user', content: String(input) }] : [],
+      stream: false,
+    };
+    const resp = await axios.post(url, body, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      timeout: 60000,
+    });
+    return res.json(resp.data);
+  } catch (err) {
+    const status = err.response?.status || 500;
+    const data = err.response?.data || { message: err.message };
+    return res.status(status).json({ error: 'wxo_call_failed', details: data });
+  }
+});
+
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
   // eslint-disable-next-line no-console

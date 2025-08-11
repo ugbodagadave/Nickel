@@ -50,6 +50,29 @@
       <div class="placeholder">
         <p>Placeholder: Orchestrate web chat will render here after we set up the instance URL, API key, and agent.</p>
       </div>
+      <h3>Quick API test</h3>
+      <form id="wxo-form">
+        <label for="wxo-input">Message</label>
+        <input id="wxo-input" placeholder="Ask the agent..." />
+        <button type="submit">Send</button>
+      </form>
+      <pre id="wxo-out"></pre>
+      <script>
+        const wxoForm = document.getElementById('wxo-form');
+        const wxoOut = document.getElementById('wxo-out');
+        wxoForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          wxoOut.textContent = '...calling Orchestrate';
+          const input = document.getElementById('wxo-input').value;
+          try {
+            const resp = await fetch('/api/wxo/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ input }) });
+            const data = await resp.json();
+            wxoOut.textContent = JSON.stringify(data, null, 2);
+          } catch (err) {
+            wxoOut.textContent = 'Error: ' + err.message;
+          }
+        });
+      </script>
     </section>
 
     <section>
