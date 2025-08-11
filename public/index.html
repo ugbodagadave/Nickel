@@ -19,6 +19,32 @@
       <p>See <a href="../development_plan.md">development plan</a> and <a href="../prd.md">PRD</a> for scope.</p>
     </section>
 
+    <section>
+      <h2>watsonx.ai smoke test</h2>
+      <form id="wx-form">
+        <label for="wx-input">Message</label>
+        <input id="wx-input" placeholder="Say hello to Granite..." />
+        <button type="submit">Send</button>
+      </form>
+      <pre id="wx-out"></pre>
+      <script>
+        const form = document.getElementById('wx-form');
+        const out = document.getElementById('wx-out');
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          out.textContent = '...calling watsonx.ai';
+          const input = document.getElementById('wx-input').value;
+          try {
+            const resp = await fetch('/api/wx/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ input }) });
+            const data = await resp.json();
+            out.textContent = JSON.stringify(data, null, 2);
+          } catch (err) {
+            out.textContent = 'Error: ' + err.message;
+          }
+        });
+      </script>
+    </section>
+
     <section class="chat">
       <h2>Orchestrate Chat (to be embedded)</h2>
       <div class="placeholder">
