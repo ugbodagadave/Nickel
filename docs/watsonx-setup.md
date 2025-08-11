@@ -1,21 +1,23 @@
 # watsonx.ai setup
 
 This project uses watsonx.ai APIs/SDKs. You must provide:
-- IBM Cloud API key
+- API key
 - watsonx.ai endpoint URL (region)
 - Project ID (or Space ID as applicable)
 
 Required environment variables:
-- `IBM_CLOUD_API_KEY`
+- `WATSONX_API_KEY`
 - `WATSONX_URL` (e.g., `https://us-south.ml.cloud.ibm.com`, or `https://eu-de.ml.cloud.ibm.com`, etc.)
 - `WATSONX_PROJECT_ID` (preferred) or `WATSONX_SPACE_ID`
+- `WATSONX_MODEL_ID` (e.g., `ibm/granite-3-3-8b-instruct`)
+- `WATSONX_API_VERSION` (e.g., `2023-05-29`)
 
 Quick steps:
 1) Obtain credentials (Hackathon account):
    - Join IBM Cloud hackathon account and access watsonx.ai per the guide.
    - Create or identify your Project in watsonx.ai and copy its Project ID.
-2) Generate IAM token at runtime (server side) using `IBM_CLOUD_API_KEY`.
-3) Call watsonx.ai endpoints with `Authorization: Bearer <token>` and your `project_id`.
+2) Generate IAM token at runtime (server side) using `WATSONX_API_KEY`.
+3) Call watsonx.ai endpoints with `Authorization: Bearer <token>`, your `project_id`, and chosen `model_id`.
 
 Notes:
 - Foundation model inference consumes tokens (RUs). Track credits as explained in the hackathon guide.
