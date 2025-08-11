@@ -92,6 +92,7 @@ app.post('/api/wxo/chat', async (req, res) => {
     const body = {
       messages: input ? [{ role: 'user', content: String(input) }] : [],
       stream: false,
+      environment: 'live'
     };
     const resp = await axios.post(url, body, {
       headers: {
@@ -105,6 +106,8 @@ app.post('/api/wxo/chat', async (req, res) => {
   } catch (err) {
     const status = err.response?.status || 500;
     const data = err.response?.data || { message: err.message };
+    // eslint-disable-next-line no-console
+    console.error('wxo_call_failed', status, data);
     return res.status(status).json({ error: 'wxo_call_failed', details: data });
   }
 });
