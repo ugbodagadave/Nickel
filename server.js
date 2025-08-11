@@ -88,11 +88,10 @@ app.post('/api/wxo/chat', async (req, res) => {
       return res.status(400).json({ error: 'Missing WXO_* env vars' });
     }
     const token = await getIamToken(apiKey);
-    const url = `${instanceUrl}/v1/orchestrate/${agentId}/chat/completions`;
+    const url = `${instanceUrl}/v1/orchestrate/agents/${agentId}/chat/completions`;
     const body = {
       messages: input ? [{ role: 'user', content: String(input) }] : [],
-      stream: false,
-      environment: 'live'
+      stream: false
     };
     const resp = await axios.post(url, body, {
       headers: {
